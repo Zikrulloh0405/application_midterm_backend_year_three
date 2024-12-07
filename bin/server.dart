@@ -4,7 +4,6 @@ import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 
-// In-memory database and cart
 final data = {
   "1": {
     "name": "Big burger",
@@ -28,31 +27,28 @@ final data = {
   },
 };
 
-final Map<String, int> cart = {}; // In-memory cart: productId -> quantity
+final Map<String, int> cart = {}; 
 
 // Configure routes
 final _router = Router()
   ..get('/', _rootHandler)
-  ..get('/products', _getProductsHandler) // Serve product list
-  ..post('/cart', _addToCartHandler) // Add/Increment product in cart
-  ..put('/cart', _updateCartHandler) // Decrement product quantity
-  ..delete('/cart/<productId>', _deleteFromCartHandler) // Remove product from cart
-  ..post('/buy', _buyHandler) // Reset cart on "Buy" button
-  ..get('/static/<file>', _staticFileHandler); // Serve static files
+  ..get('/products', _getProductsHandler) 
+  ..post('/cart', _addToCartHandler) 
+  ..put('/cart', _updateCartHandler) 
+  ..delete('/cart/<productId>', _deleteFromCartHandler) 
+  ..post('/buy', _buyHandler) 
+  ..get('/static/<file>', _staticFileHandler); 
 
-// Root handler
 Response _rootHandler(Request req) {
   return Response.ok('Welcome to the backend for the e-commerce app!\n');
 }
 
-// Products handler
 Response _getProductsHandler(Request req) {
   return Response.ok(jsonEncode(data), headers: {
     'Content-Type': 'application/json',
   });
 }
 
-// Add or increment product in the cart
 Future<Response> _addToCartHandler(Request req) async {
   final body = await req.readAsString();
   final requestData = jsonDecode(body);
@@ -69,7 +65,6 @@ Future<Response> _addToCartHandler(Request req) async {
   });
 }
 
-// Decrement product quantity in the cart
 Future<Response> _updateCartHandler(Request req) async {
   final body = await req.readAsString();
   final requestData = jsonDecode(body);
@@ -82,7 +77,7 @@ Future<Response> _updateCartHandler(Request req) async {
   cart[productId] = cart[productId]! - 1;
 
   if (cart[productId]! <= 0) {
-    cart.remove(productId); // Remove from cart if quantity reaches zero
+    cart.remove(productId); 
   }
 
   return Response.ok(jsonEncode(cart), headers: {
@@ -90,7 +85,6 @@ Future<Response> _updateCartHandler(Request req) async {
   });
 }
 
-// Delete product from cart
 Response _deleteFromCartHandler(Request req, String productId) {
   if (!cart.containsKey(productId)) {
     return Response.notFound('Product not in cart');
@@ -103,7 +97,6 @@ Response _deleteFromCartHandler(Request req, String productId) {
   });
 }
 
-// Buy handler: Reset cart
 Response _buyHandler(Request req) {
   cart.clear();
 
@@ -116,13 +109,11 @@ Response _buyHandler(Request req) {
 // Static file handler
 Response _staticFileHandler(Request request) {
   final fileName = request.params['file'];
-  final file = File('images/$fileName'); // Updated to look in the `images` directory
-  print('Looking for file: ${file.path}'); // Log file path for debugging
+  final file = File('images/$fileName'); 
   if (file.existsSync()) {
     return Response.ok(file.openRead(),
-        headers: {'Content-Type': 'image/png'}); // Serve as PNG
+        headers: {'Content-Type': 'image/png'}); 
   } else {
-    print('File not found: ${file.path}');
     return Response.notFound('File not found');
   }
 }
@@ -182,7 +173,7 @@ String _logDetails(Request request, Response response) {
 void main(List<String> args) async {
   final ip = InternetAddress.anyIPv4;
   final handler = Pipeline()
-      .addMiddleware(enhancedLogging()) // Use enhanced logging middleware
+      .addMiddleware(enhancedLogging()) 
       .addHandler(_router.call);
 
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
