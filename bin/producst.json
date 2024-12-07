@@ -1,0 +1,31 @@
+
+{
+    "1" : {
+        "name" : "Big burger",
+        "price": 8.99,
+        "pieces": 400,
+        "images": "images/big_burger.png",
+        "description": "Very delicious thing"
+    },
+    "2": {
+        "name": "Wendy's",
+        "price": 5.00,
+        "pieces": 300,
+        "images": "images/wendys_burger.png",
+        "description": "Very delicious thing"
+    },
+    "3": {
+        "name": "Black burger",
+        "price": 7.67,
+        "pieces": 500,
+        "images": "images/black_burger.png",
+        "description": "Very delicious thing"
+    },
+    "4": {
+        "name": "Hot Dog",
+        "price": 3.50,
+        "pieces": 600,
+        "images": "images/hot_dog.png",
+        "description": "Very delicious thing"
+    }
+}
